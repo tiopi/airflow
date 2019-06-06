@@ -70,6 +70,12 @@
             'login': 'Username',
           }
         },
+        sentry: {
+          hidden_fields: ['host', 'schema', 'login', 'password', 'port', 'extra'],
+          relabeling: {
+            'conn_id':'DSN'
+          }
+        },
       }
       function connTypeChange(connectionType) {
         $("div.form-group").removeClass("hide");

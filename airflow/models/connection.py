@@ -107,6 +107,7 @@ class Connection(Base, LoggingMixin):
         ('mongo', 'MongoDB'),
         ('gcpcloudsql', 'Google Cloud SQL'),
         ('grpc', 'GRPC Connection'),
+        ('sentry', 'Sentry DSN'),
     ]
 
     def __init__(
