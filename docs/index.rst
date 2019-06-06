@@ -88,6 +88,7 @@ Content
     api
     integration
     metrics
+    errors
     kubernetes
     lineage
     changelog

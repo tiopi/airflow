@@ -48,6 +48,7 @@ from airflow.models.taskfail import TaskFail
 from airflow.models.taskreschedule import TaskReschedule
 from airflow.models.variable import Variable
 from airflow.models.xcom import XCom, XCOM_RETURN_KEY
+from airflow.sentry import Sentry
 from airflow.stats import Stats
 from airflow.ti_deps.dep_context import DepContext, QUEUE_DEPS, RUN_DEPS
 from airflow.utils import timezone
@@ -192,6 +193,8 @@ class TaskInstance(Base, LoggingMixin):
         # Is this TaskInstance being currently running within `airflow run --raw`.
         # Not persisted to the database so only valid for the current process
         self.raw = False
+
+        Sentry.add_tagging(task_instance=self)
 
     @reconstructor
     def init_on_load(self):
@@ -901,6 +904,8 @@ class TaskInstance(Base, LoggingMixin):
                 self.clear_xcom_data()
 
                 start_time = time.time()
+
+                Sentry.add_breadcrumbs(session=session)
 
                 self.render_templates()
                 task_copy.pre_execute(context=context)
