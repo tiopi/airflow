@@ -18,6 +18,7 @@
 # under the License.
 
 import json
+from builtins import bytes
 from urllib.parse import urlparse, unquote, parse_qsl
 
 from sqlalchemy import Column, Integer, String, Boolean
@@ -98,7 +99,6 @@ class Connection(Base, LoggingMixin):
         ('emr', 'Elastic MapReduce',),
         ('snowflake', 'Snowflake',),
         ('segment', 'Segment',),
-        ('sqoop', 'Sqoop',),
         ('azure_data_lake', 'Azure Data Lake'),
         ('azure_container_instances', 'Azure Container Instances'),
         ('azure_cosmos', 'Azure CosmosDB'),
@@ -107,6 +107,7 @@ class Connection(Base, LoggingMixin):
         ('mongo', 'MongoDB'),
         ('gcpcloudsql', 'Google Cloud SQL'),
         ('grpc', 'GRPC Connection'),
+        ('sentry', 'Sentry DSN'),
     ]
 
     def __init__(
@@ -269,6 +270,9 @@ class Connection(Base, LoggingMixin):
         elif self.conn_type == 'grpc':
             from airflow.contrib.hooks.grpc_hook import GrpcHook
             return GrpcHook(grpc_conn_id=self.conn_id)
+        elif self.conn_type == 'sentry':
+            from airflow.contrib.hooks.sentry_hook import SentryHook
+            return SentryHook(sentry_conn_id=self.conn_id)
         raise AirflowException("Unknown hook type {}".format(self.conn_type))
 
     def __repr__(self):
