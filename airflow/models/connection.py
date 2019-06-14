@@ -18,7 +18,6 @@
 # under the License.
 
 import json
-from builtins import bytes
 from urllib.parse import urlparse, unquote, parse_qsl
 
 from sqlalchemy import Column, Integer, String, Boolean
@@ -99,6 +98,7 @@ class Connection(Base, LoggingMixin):
         ('emr', 'Elastic MapReduce',),
         ('snowflake', 'Snowflake',),
         ('segment', 'Segment',),
+        ('sqoop', 'Sqoop',),
         ('azure_data_lake', 'Azure Data Lake'),
         ('azure_container_instances', 'Azure Container Instances'),
         ('azure_cosmos', 'Azure CosmosDB'),

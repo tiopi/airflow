@@ -26,14 +26,25 @@ from airflow.hooks.base_hook import BaseHook
 
 class SentryHook(BaseHook):
     """
-    Wrap around the Sentry SDK.
+    Interact with Sentry. This class is a thin wrapper around the Sentry SDK.
+
+    .. seealso:: the latest documentation `here <https://docs.sentry.io>`_.
+
+    :param sentry_conn_id: The connection id to authenticate and get an object for Sentry
+    :type sentry_conn_id: str
     """
 
     def __init__(self, sentry_conn_id="sentry_default"):
-        super(SentryHook, self).__init__('sentry')
+        super(SentryHook, self).__init__("sentry")
         self.sentry_conn_id = sentry_conn_id
 
     def get_conn(self):
+        """
+        Opens a connection with the Sentry SDK.
+
+        :return: an authorized Sentry SDK session object
+        :rtype: sentry_sdk.Client
+        """
         integrations = []
         ignore_logger("airflow.task")
         ignore_logger("airflow.jobs.backfill_job.BackfillJob")
