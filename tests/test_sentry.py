@@ -116,9 +116,8 @@ class TestSentryHook(unittest.TestCase):
         Test adding breadcrumbs.
         """
         self.sentry.add_tagging(task_instance=self.ti)
-        self.sentry.add_breadcrumbs(session=self.session)
+        self.sentry.add_breadcrumbs(task_instance=self.ti, session=self.session)
 
         with configure_scope() as scope:
             test_crumb = scope._breadcrumbs.pop()
-            print(test_crumb)
             self.assertEqual(CRUMB, test_crumb)
