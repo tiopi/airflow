@@ -125,8 +125,6 @@ class ConfiguredSentry:
         Function to add tagging for a task_instance.
         """
         task = task_instance.task
-        execution_date = task_instance.execution_date
-        dag_id = task_instance.dag_id
 
         with configure_scope() as scope:
             for tag_name in self.SCOPE_TAGS:
