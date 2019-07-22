@@ -79,7 +79,6 @@ def get_task_instances(dag_id, task_ids, execution_date, session=None):
         )
         .all()
     )
-     
 
 
 class ConfiguredSentry:
@@ -126,8 +125,8 @@ class ConfiguredSentry:
         Function to add tagging for a task_instance.
         """
         task = task_instance.task
-        self.execution_date = task_instance.execution_date
-        self.dag_id = task_instance.dag_id
+        execution_date = task_instance.execution_date
+        dag_id = task_instance.dag_id
 
         with configure_scope() as scope:
             for tag_name in self.SCOPE_TAGS:
@@ -137,11 +136,10 @@ class ConfiguredSentry:
                 scope.set_tag(tag_name, attribute)
 
     @provide_session
-    def add_breadcrumbs(self, session=None):
+    def add_breadcrumbs(self, task_instance, session=None):
         """
         Function to add breadcrumbs inside of a task_instance.
         """
-
         if session is None:
             return
         dag_id = task_instance.dag_id
@@ -171,7 +169,7 @@ class ConfiguredSentry:
             # tags and breadcrumbs to a specific Task Instance
             with push_scope():
                 self.add_tagging(task_instance)
-                self.add_breadcrumbs(session)
+                self.add_breadcrumbs(task_instance, session=session)
                 try:
                     func(task_instance, *args, session=session, **kwargs)
                 except Exception as e:
